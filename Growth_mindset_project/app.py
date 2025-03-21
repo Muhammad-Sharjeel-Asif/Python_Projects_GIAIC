@@ -21,3 +21,29 @@ if uploadFiles:
             st.error(f"Unsupported file format {fileExt}")
             continue
 
+        st.write(f"**File Name** {file.name}")
+        st.write(f"**File Size** {file.size}")
+
+        st.write("Preview the Head of Data Frame")
+        st.dataframe(df.head())
+
+        st.subheader("Data cleaning options")
+        if st.checkbox(f"Clean data for {file.name}"):
+            col1, col2 = st.columns(2)
+
+            with col1:
+                if st.button(f"Remove duplicates for {file.name}"):
+                    df.drop_duplicates(inplace=True)
+                    st.write("Duplicates removed!")
+                
+            with col2:
+                if st.button(f"Fill missing values for {file.name}"):
+                    numeric_cols = df.select_dtypes(include=["number"]).columns
+                    df [numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+                    st.write("Missing values have been filled!")
+
+        st.subheader("Select Columns to Convert")
+        columns = st.multiselect(f"Choose columns for {file.name}", df.columns, default=df.columns)
+        df = df[columns]
+
+        st.subheader("Data Visualization")
