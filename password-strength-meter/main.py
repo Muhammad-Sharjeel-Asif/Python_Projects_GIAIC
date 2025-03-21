@@ -55,6 +55,8 @@ if st.button("Check Password Strength"):
 
         if password_score < 3:
             st.session_state.show_generate = True
+    else:
+        st.error("Please enter the password")
 
 if st.session_state.show_generate:
     st.subheader("🔄 Generate a Strong Password")
